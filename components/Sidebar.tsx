@@ -1,63 +1,90 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Home, Package, List, Menu } from "lucide-react"
+import Image from "next/image";
+import { useState } from "react";
+import { Home, Package, Clock, Settings, Menu } from "lucide-react";
 
 export default function Sidebar() {
-    const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(true);
 
-    return (
-        <aside
-            className={`
-        h-screen bg-zinc-950 border-r border-zinc-800 flex flex-col items-center py-6 gap-6
+  return (
+    <aside
+      className={`
+        h-screen bg-zinc-950 border-r border-zinc-800 flex flex-col
         transition-all duration-300
-        ${collapsed ? "w-20" : "w-64"}
+        ${collapsed ? "w-16" : "w-64"}
       `}
+    >
+      {/* HEADER */}
+      <div
+        className={`
+    relative flex border-b border-zinc-800 transition-all duration-300
+    ${collapsed ? "flex-col items-center py-6 px-2 gap-4" : "flex-row items-center justify-between px-4 py-8"}
+  `}
+      >
+        {/* LOGO */}
+        {collapsed ? <Image
+          src="/logo1.png"
+          alt="FulfillFlow logo"
+          width={collapsed ? 48 : 120}
+          height={collapsed ? 48 : 120}
+          className="opacity-90 transition-all duration-300"
+        /> : null}
+
+        {/* NAME (only expanded) */}
+        {!collapsed && (
+          <span className="text-xl font-semibold text-white">
+            FulfillFlow
+          </span>
+        )}
+
+        {/* HAMBURGER BUTTON */}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className={`
+                      flex items-center gap-3 text-zinc-400 cursor-pointer
+                      transition-all duration-200 py-1 rounded-md
+                      hover:bg-zinc-800 hover:text-white
+                      ${collapsed ? "justify-center w-full px-0" : "px-2 py-1"}
+                    `}
         >
-            <div className="w-full flex items-center justify-between px-4">
-                {!collapsed && (
-                    <div className="text-xl font-semibold text-white">FulfillFlow</div>
-                )}
+          <Menu size={collapsed ? 30 : 20} />
+        </button>
+      </div>
 
-                <button
-                    onClick={() => setCollapsed(!collapsed)}
-                    className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-zinc-800 transition"
-                >
-                    <Menu size={20} />
-                </button>
-            </div>
 
-            {!collapsed && (
-                <div className="w-full px-4">
-                    <div className="w-full h-12 rounded-2xl bg-zinc-800 flex items-center justify-center text-sm font-semibold">
-                        Ru
-                    </div>
-                </div>
-            )}
+      {/* NAVIGATION */}
+      <nav className="flex flex-col gap-2 p-2">
+        <SidebarItem collapsed={collapsed} icon={<Home />} label="Dashboard" />
+        <SidebarItem collapsed={collapsed} icon={<Package />} label="Orders" />
+        <SidebarItem collapsed={collapsed} icon={<Clock />} label="Activity Log" />
+        <SidebarItem collapsed={collapsed} icon={<Settings />} label="Settings" />
+      </nav>
+    </aside>
+  );
+}
 
-            {collapsed && (
-                <div className="w-10 h-10 rounded-2xl bg-zinc-800 flex items-center justify-center text-sm font-semibold">
-                    Ru
-                </div>
-            )}
+interface SidebarItemProps {
+  collapsed: boolean;
+  icon: React.ReactNode;
+  label: string;
+}
 
-            {/* Nav */}
-            <nav className="flex flex-col gap-4 mt-4 w-full px-4">
-                <button className="flex items-center gap-3 p-3 rounded-xl hover:bg-zinc-800 transition">
-                    <Home size={20} />
-                    {!collapsed && <span className="text-white">Dashboard</span>}
-                </button>
 
-                <button className="flex items-center gap-3 p-3 rounded-xl hover:bg-zinc-800 transition">
-                    <Package size={20} />
-                    {!collapsed && <span className="text-white">Orders</span>}
-                </button>
-
-                <button className="flex items-center gap-3 p-3 rounded-xl hover:bg-zinc-800 transition">
-                    <List size={20} />
-                    {!collapsed && <span className="text-white">Activity</span>}
-                </button>
-            </nav>
-        </aside>
-    )
+function SidebarItem({
+  collapsed,
+  icon,
+  label }: SidebarItemProps) {
+  return (
+    <div
+      className={`
+        flex items-center gap-3 text-zinc-400 hover:text-white cursor-pointer
+        transition-all duration-300 py-2 rounded-lg hover:bg-zinc-800
+        ${collapsed ? "justify-center w-full" : ""}
+      `}
+    >
+      {icon}
+      {!collapsed && <span>{label}</span>}
+    </div>
+  );
 }
