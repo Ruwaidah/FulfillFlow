@@ -15,7 +15,7 @@ model User {
   role          String        @default("team_lead")
   activities    Activity[]  
   orders        Order[]       @relation("AssignedOrders")
-  createAt      DateTime      @default(now())
+  createdAt      DateTime      @default(now())
 }
 
 
@@ -24,7 +24,7 @@ model Order {
   customerName    String
   status          String    @default("pending")
   priority        String    @default("medium")
-  createAt        DateTime  @default(now())
+  createdAt        DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
   assignedTo      User?     @relation("AssignedOrders", fields: [assignedToId], references: [id])
